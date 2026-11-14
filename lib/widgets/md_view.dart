@@ -236,9 +236,53 @@ class _SubHeading extends StatelessWidget {
 class _TableBlock extends StatelessWidget {
   final String text;
   const _TableBlock(this.text);
+
+  /// Splits a markdown table into rows of cells (drops the |---| separator row).
+  static List<List<String>> _rows(String t) {
+    final rows = <List<String>>[];
+    for (final line in t.split('\n')) {
+      final l = line.trim();
+      if (!l.startsWith('|')) continue;
+      if (RegExp(r'^\|[\s:|-]+\|?$').hasMatch(l)) continue;   // separator row
+      var inner = l.substring(1);
+      if (inner.endsWith('|') && !inner.endsWith(r'\|')) inner = inner.substring(0, inner.length - 1);
+      rows.add(inner.split(RegExp(r'(?<!\\)\|')).map((c) => c.trim()).toList());
+    }
+    return rows;
+  }
+
   @override
   Widget build(BuildContext context) {
     final a = Brand.accent;
+    final rows = _rows(text);
+    // Two-column "label | text" tables (Aim / Scripture Reading / Memory Verse): stack label above text so
+    // everything wraps inside the screen instead of running off the side.
+    final keyValue = rows.isNotEmpty &&
+        rows.every((r) => r.length == 2 && r[0].startsWith('**') && r[0].length <= 60);
+    if (keyValue) {
+      return Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: a.withValues(alpha: 0.3)),
+          color: a.withValues(alpha: 0.04),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(children: [
+          for (var i = 0; i < rows.length; i++)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
+              decoration: BoxDecoration(border: i == 0 ? null : Border(top: BorderSide(color: a.withValues(alpha: 0.2)))),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(rows[i][0].replaceAll('**', '').trim(), style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: a, letterSpacing: 0.3)),
+                const SizedBox(height: 2),
+                _md(context, rows[i][1]),
+              ]),
+            ),
+        ]),
+      );
+    }
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(

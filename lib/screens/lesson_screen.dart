@@ -90,17 +90,36 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
     }
   }
 
+  /// Pill-shaped Previous / Next button for the top bar (both use the same soft-tint outlined style).
+  Widget _navPill(String label, IconData icon, VoidCallback? onTap, {required bool leading}) {
+    final a = Brand.accent;
+    final enabled = onTap != null;
+    final fg = enabled ? a : Colors.grey.shade400;
+    final text = Text(label, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: fg));
+    final ic = Icon(icon, size: 17, color: fg);
+    return Center(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: onTap,
+        child: Container(
+          padding: EdgeInsets.fromLTRB(leading ? 5 : 11, 6, leading ? 11 : 5, 6),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: enabled ? a.withValues(alpha: 0.10) : Colors.grey.shade200,
+            border: enabled ? Border.all(color: a.withValues(alpha: 0.45)) : null,
+          ),
+          child: Row(mainAxisSize: MainAxisSize.min, children: leading ? [ic, text] : [text, ic]),
+        ),
+      ),
+    );
+  }
+
   static const _tabIcons = [Icons.menu_book_rounded, Icons.fact_check_rounded, Icons.edit_note_rounded, Icons.palette_rounded, Icons.sports_esports_rounded];
   static const _tabLabels = ['Guide', 'Answers', 'Student', 'Crafts', 'Games'];
 
   @override
   Widget build(BuildContext context) {
     final prev = _i > 0, next = _i < widget.lessons.length - 1;
-    const navStyle = ButtonStyle(
-      padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 4)),
-      minimumSize: WidgetStatePropertyAll(Size(0, 40)),
-      visualDensity: VisualDensity.compact,
-    );
     return Scaffold(
       drawer: const AppDrawer(),
       appBar: AppBar(
@@ -109,24 +128,18 @@ class _LessonScreenState extends State<LessonScreen> with TickerProviderStateMix
         titleSpacing: 0,
         title: Text('Lesson ${lesson.lessonNo}', style: const TextStyle(fontSize: 16)),
         actions: [
-          TextButton.icon(
-            style: navStyle,
-            onPressed: prev ? () => _go(_i - 1) : null,
-            icon: const Icon(Icons.chevron_left, size: 20),
-            label: const Text('Previous', style: TextStyle(fontSize: 13)),
-          ),
-          TextButton.icon(
-            style: navStyle,
-            onPressed: next ? () => _go(_i + 1) : null,
-            icon: const Text('Next', style: TextStyle(fontSize: 13)),
-            label: const Icon(Icons.chevron_right, size: 20),
-          ),
+          _navPill('Previous', Icons.chevron_left, prev ? () => _go(_i - 1) : null, leading: true),
+          const SizedBox(width: 6),
+          _navPill('Next', Icons.chevron_right, next ? () => _go(_i + 1) : null, leading: false),
           const SizedBox(width: 4),
         ],
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : TabBarView(controller: _tabs, children: [for (final k in LessonKind.values) _panel(k)]),
+          : Directionality(
+              textDirection: widget.language.textDirection,
+              child: TabBarView(controller: _tabs, children: [for (final k in LessonKind.values) _panel(k)]),
+            ),
       bottomNavigationBar: AnimatedBuilder(
         animation: _tabs.animation!,
         builder: (_, __) => NavigationBar(

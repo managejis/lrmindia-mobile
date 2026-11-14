@@ -140,6 +140,6 @@ insert into public.languages (code, name, native_name, glyph, web_folder, sort_o
   ('ml','Malayalam','മലയാളം',   'മ',  'Malayalam',7,  true),
   ('mr','Marathi',  'मराठी',     'म',  'Marathi',  8,  true),
   ('hi','Hindi',    'हिन्दी',    'हि', 'Hindi',    9,  true),
-  ('or','Odia',     'ଓଡ଼ିଆ',     'ଓ',  'Odia',     10, false),
-  ('ur','Urdu',     'اردو',      'ا',  'Urdu',     11, false)
+  ('or','Odia',     'ଓଡ଼ିଆ',     'ଓ',  'Odia',     10, true),
+  ('ur','Urdu',     'اردو',      'ا',  'Urdu',     11, true)
 on conflict (code) do update set sort_order = excluded.sort_order, native_name = excluded.native_name, glyph = excluded.glyph;

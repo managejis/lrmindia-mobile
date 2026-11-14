@@ -1,6 +1,6 @@
 # ABBA Sunday School (Flutter, Android)
 
-Bible lessons and children's songs in English, Tamil, Telugu, Kannada, Bengali, Gujarati, Malayalam, Marathi and Hindi (Odia and Urdu are listed as *Coming soon*) for Sunday-school teachers.
+Bible lessons and children's songs in English, Tamil, Telugu, Kannada, Bengali, Gujarati, Malayalam, Marathi and Hindi (Odia and Urdu lessons included; Urdu is shown right-to-left) for Sunday-school teachers.
 Text only - no Word files. Content lives in **Supabase (PostgreSQL)**, is copied to **SQLite** on the phone
 for offline reading, and the student workbook PDF is downloaded from **lrmindia.org** on request.
 

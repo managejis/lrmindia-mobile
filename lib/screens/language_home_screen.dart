@@ -237,7 +237,7 @@ class _BookCard extends StatelessWidget {
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text('Book ${book.bookNo}', style: const TextStyle(color: Colors.white70, fontSize: 12)),
-                Text(book.mainTitle, style: const TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800, height: 1.3)),
+                Directionality(textDirection: lang.textDirection, child: Text(book.mainTitle, style: const TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800, height: 1.3))),
                 if (book.hasNative) Text(book.titleEn, style: const TextStyle(color: Colors.white70, fontSize: 12, height: 1.3)),
               ]),
             ),
@@ -274,7 +274,7 @@ class _BookCard extends StatelessWidget {
                   dense: true,
                   trailing: done.contains('${l.bookNo}:${l.lessonNo}') ? const Icon(Icons.check_circle, color: Color(0xFF198754)) : null,
                   leading: CircleAvatar(radius: 14, backgroundColor: a.withOpacity(.12), child: Text('${l.lessonNo}', style: TextStyle(fontSize: 12, color: a, fontWeight: FontWeight.w700))),
-                  title: Text(l.titleNative, style: const TextStyle(fontSize: 16, height: 1.35)),
+                  title: Directionality(textDirection: lang.textDirection, child: Text(l.titleNative, style: const TextStyle(fontSize: 16, height: 1.35))),
                   subtitle: l.titleEn == null ? null : Text(l.titleEn!, style: TextStyle(fontSize: 11.5, color: Colors.grey.shade600)),
                   onTap: () => _open(context, l),
                 ),
