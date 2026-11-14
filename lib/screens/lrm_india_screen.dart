@@ -33,6 +33,7 @@ class LrmIndiaScreen extends StatelessWidget {
         ),
         const SizedBox(height: 22),
         _row(Icons.place_outlined, 'Jesus House, Nirai Valvu Nagar, 2nd Street,\nOpp to Car set, Virudhunagar 626001', null),
+        _row(Icons.phone_outlined, '(+91) 7795289187', () => _open(context, 'tel:+917795289187')),
         _row(Icons.phone_outlined, '(+91) 936-77-52-709', () => _open(context, 'tel:+919367752709')),
         _row(Icons.email_outlined, 'lrm.india@yahoo.com', () => _open(context, 'mailto:lrm.india@yahoo.com')),
         _row(Icons.language, 'lrmindia.org', () => _open(context, AppConfig.siteBase)),

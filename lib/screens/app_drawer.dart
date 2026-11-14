@@ -8,8 +8,9 @@ import 'lrm_india_screen.dart';
 import 'privacy_screen.dart';
 import 'profile_screen.dart';
 import 'settings_screen.dart';
+import 'tips_screen.dart';
 
-/// The burger menu: Lessons, Songs, Profile, Settings, LRM India, Feedback, Privacy Policy.
+/// The burger menu: Lessons, Songs, Tips, Profile, Settings, LRM India, Feedback, Privacy Policy.
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
@@ -49,6 +50,7 @@ class AppDrawer extends StatelessWidget {
                 Navigator.of(context).popUntil((r) => r.isFirst);   // back to the welcome / language list
               }),
               _item(context, Icons.music_note_outlined, 'Songs', () => _go(context, const LanguagesScreen(forSongs: true))),
+              _item(context, Icons.lightbulb_outline, 'Tips', () => _go(context, const TipsScreen())),
               const Divider(),
               _item(context, Icons.person_outline, 'Profile', () => _go(context, const ProfileScreen())),
               _item(context, Icons.settings_outlined, 'Settings', () => _go(context, const SettingsScreen())),

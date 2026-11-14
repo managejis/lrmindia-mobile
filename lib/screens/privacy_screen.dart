@@ -48,6 +48,18 @@ class PrivacyScreen extends StatelessWidget {
           Text(body, style: const TextStyle(fontSize: 15.5, height: 1.6)),
           const SizedBox(height: 18),
         ],
+        Text('Copyright', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: Brand.accent)),
+        const SizedBox(height: 6),
+        const Text('Copyright © Global Recordings Network. Used by permission.', style: TextStyle(fontSize: 15.5, height: 1.6)),
+        const SizedBox(height: 10),
+        const Text(
+          "The Teacher's Guide in this app is copyrighted material of Global Recordings Network and is used here by permission. "
+          'Please do not copy, reproduce or redistribute it without the permission of the copyright owner.',
+          style: TextStyle(fontSize: 15.5, height: 1.6),
+        ),
+        const SizedBox(height: 14),
+        Center(child: Image.asset('assets/grn.jpg', height: 110, fit: BoxFit.contain, semanticLabel: 'Global Recordings Network')),
+        const SizedBox(height: 10),
       ]),
     );
   }

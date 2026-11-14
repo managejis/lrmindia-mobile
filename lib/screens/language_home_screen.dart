@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:open_filex/open_filex.dart';
 
 import '../config.dart';
 import '../data/local_db.dart';
 import '../data/models.dart';
+import '../data/pdf_downloader.dart';
 import '../data/repository.dart';
+import '../data/ui_strings.dart';
 import '../settings.dart';
 import '../theme.dart';
 import 'app_drawer.dart';
@@ -92,7 +95,7 @@ class _LanguageHomeScreenState extends State<LanguageHomeScreen> {
             IconButton(tooltip: 'Back', icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.maybePop(context)),
           ]),
         ),
-        title: Text(lang.name),
+        title: Text(lang.code == 'en' ? lang.name : lang.nativeName),
         actions: [
           if (_refreshing) const Padding(padding: EdgeInsets.all(16), child: SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))),
           IconButton(
@@ -147,53 +150,47 @@ class _LanguageHomeScreenState extends State<LanguageHomeScreen> {
         child: _BookCard(book: b, lessons: all, shown: titleHit ? all : hit, forceOpen: q.isNotEmpty && hit.isNotEmpty, lang: lang, done: _done, onBack: _loadLocal),
       ));
     }
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-      children: [
-        Wrap(spacing: 8, crossAxisAlignment: WrapCrossAlignment.center, children: [
-          Icon(Icons.menu_book, size: 18, color: Brand.accent),
-          Text('Christian Sunday School', style: TextStyle(color: Brand.accent, fontWeight: FontWeight.w600)),
-        ]),
-        const SizedBox(height: 8),
-        Text.rich(TextSpan(children: [
-          TextSpan(text: '${lang.name} - Bible Lessons for '),
-          TextSpan(text: 'Kids & Children', style: TextStyle(color: Brand.accent)),
-        ]), style: const TextStyle(fontSize: 27, height: 1.2, fontWeight: FontWeight.w800, color: Brand.heading)),
-        const SizedBox(height: 10),
-        Text(lang.heroLead ?? 'Bible lessons in ${lang.name}, with a Teacher’s Guide, workbooks, crafts and games for every lesson.',
-            style: const TextStyle(fontSize: 15.5, height: 1.5)),
-        const SizedBox(height: 16),
-        Row(children: [
-          _stat('${_books.length}', 'Books'),
-          const SizedBox(width: 10),
-          _stat('${_lessons.length}', 'Lessons'),
-          const SizedBox(width: 10),
-          _stat('5', 'Resources each'),
-        ]),
-        const SizedBox(height: 16),
-        TextField(
-          decoration: const InputDecoration(prefixIcon: Icon(Icons.search), hintText: 'Search a lesson, e.g. Noah, David, Jesus...'),
-          onChanged: (v) => setState(() => _q = v),
-        ),
-        const SizedBox(height: 18),
-        const Text('Choose a Book', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w800, color: Brand.heading)),
-        const SizedBox(height: 12),
-        if (cards.isEmpty) const Padding(padding: EdgeInsets.all(24), child: Center(child: Text('No lessons match your search.'))),
-        ...cards,
-      ],
+    final ui = UiStrings.of(lang.code);
+    final regional = lang.code != 'en';
+    final headline = regional ? '${lang.nativeName} - ${ui.tail}' : '${lang.name} - Bible Lessons for Kids & Children';
+    return Directionality(
+      textDirection: lang.textDirection,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+        children: [
+          Wrap(spacing: 8, crossAxisAlignment: WrapCrossAlignment.center, children: [
+            Icon(Icons.menu_book, size: 18, color: Brand.accent),
+            Text(ui.kicker, style: TextStyle(color: Brand.accent, fontWeight: FontWeight.w600)),
+          ]),
+          const SizedBox(height: 8),
+          Text(headline, style: const TextStyle(fontSize: 26, height: 1.3, fontWeight: FontWeight.w800, color: Brand.heading)),
+          if (regional)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Directionality(
+                textDirection: TextDirection.ltr,
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('${lang.name} - Bible Lessons for Kids & Children', style: TextStyle(fontSize: 12.5, color: Colors.grey.shade600)),
+                ),
+              ),
+            ),
+          const SizedBox(height: 10),
+          Text(regional ? ui.leadFor(lang.nativeName) : (lang.heroLead ?? ui.leadFor(lang.name)), style: const TextStyle(fontSize: 15.5, height: 1.5)),
+          const SizedBox(height: 16),
+          TextField(
+            decoration: InputDecoration(prefixIcon: const Icon(Icons.search), hintText: ui.search),
+            onChanged: (v) => setState(() => _q = v),
+          ),
+          const SizedBox(height: 18),
+          Text(ui.choose, style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w800, color: Brand.heading)),
+          const SizedBox(height: 12),
+          if (cards.isEmpty) Padding(padding: const EdgeInsets.all(24), child: Center(child: Text(ui.none))),
+          ...cards,
+        ],
+      ),
     );
   }
-
-  Widget _stat(String n, String label) => Expanded(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(color: Brand.bg, borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.grey.shade200)),
-          child: Column(children: [
-            Text(n, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Brand.accent)),
-            Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
-          ]),
-        ),
-      );
 }
 
 IconData _iconFor(String? bi) => switch (bi) {
@@ -221,6 +218,7 @@ class _BookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final a = Brand.hex(book.colorA), b = Brand.hex(book.colorB, a);
+    final ui = UiStrings.of(lang.code);
     return Card(
       color: Colors.white,
       surfaceTintColor: Colors.transparent,
@@ -236,9 +234,8 @@ class _BookCard extends StatelessWidget {
             const SizedBox(width: 14),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('Book ${book.bookNo}', style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                Text(ui.bookLabel(book.bookNo), style: const TextStyle(color: Colors.white70, fontSize: 12)),
                 Directionality(textDirection: lang.textDirection, child: Text(book.mainTitle, style: const TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800, height: 1.3))),
-                if (book.hasNative) Text(book.titleEn, style: const TextStyle(color: Colors.white70, fontSize: 12, height: 1.3)),
               ]),
             ),
             Icon(_iconFor(book.icon), color: Colors.white.withOpacity(.85), size: 30),
@@ -250,14 +247,14 @@ class _BookCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(color: Brand.bg, borderRadius: BorderRadius.circular(20)),
-              child: Text('${lessons.where((l) => done.contains('${l.bookNo}:${l.lessonNo}')).length} / ${lessons.length} completed', style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600)),
+              child: Text(ui.completedLabel(lessons.where((l) => done.contains('${l.bookNo}:${l.lessonNo}')).length, lessons.length), style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600)),
             ),
             const Spacer(),
             if (lessons.isNotEmpty)
               TextButton.icon(
                 onPressed: () => _open(context, _resume),
                 icon: const Icon(Icons.arrow_forward, size: 18),
-                label: Text(_resume.lessonNo == lessons.first.lessonNo && !done.contains('${lessons.first.bookNo}:${lessons.first.lessonNo}') ? 'Start Lesson ${_resume.lessonNo}' : 'Continue Lesson ${_resume.lessonNo}'),
+                label: Text(_resume.lessonNo == lessons.first.lessonNo && !done.contains('${lessons.first.bookNo}:${lessons.first.lessonNo}') ? ui.startLabel(_resume.lessonNo) : ui.continueLabel(_resume.lessonNo)),
                 style: TextButton.styleFrom(foregroundColor: Brand.accent),
               ),
           ]),
@@ -267,7 +264,7 @@ class _BookCard extends StatelessWidget {
           child: ExpansionTile(
             key: PageStorageKey('book-${book.bookNo}-${forceOpen}'),
             initiallyExpanded: forceOpen,
-            title: Text('Browse all ${lessons.length} lessons', style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600)),
+            title: Text(ui.browseLabel(lessons.length), style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600)),
             children: [
               for (final l in shown)
                 ListTile(
@@ -275,12 +272,12 @@ class _BookCard extends StatelessWidget {
                   trailing: done.contains('${l.bookNo}:${l.lessonNo}') ? const Icon(Icons.check_circle, color: Color(0xFF198754)) : null,
                   leading: CircleAvatar(radius: 14, backgroundColor: a.withOpacity(.12), child: Text('${l.lessonNo}', style: TextStyle(fontSize: 12, color: a, fontWeight: FontWeight.w700))),
                   title: Directionality(textDirection: lang.textDirection, child: Text(l.titleNative, style: const TextStyle(fontSize: 16, height: 1.35))),
-                  subtitle: l.titleEn == null ? null : Text(l.titleEn!, style: TextStyle(fontSize: 11.5, color: Colors.grey.shade600)),
                   onTap: () => _open(context, l),
                 ),
             ],
           ),
         ),
+        _WorkbookDownload(book: book, lang: lang, color: a),
       ]),
     );
   }
@@ -291,5 +288,72 @@ class _BookCard extends StatelessWidget {
   Future<void> _open(BuildContext context, Lesson l) async {
     await Navigator.push(context, MaterialPageRoute(builder: (_) => LessonScreen(language: lang, book: book, lessons: lessons, index: lessons.indexOf(l))));
     await onBack();
+  }
+}
+
+/// "Book-N-Student-Workbook" row under "Browse all lessons": downloads the combined student workbook PDF of the book
+/// straight to the phone (Downloads / ABBA Sunday School) and opens it - the browser is not used.
+class _WorkbookDownload extends StatefulWidget {
+  final Book book;
+  final Language lang;
+  final Color color;
+  const _WorkbookDownload({required this.book, required this.lang, required this.color});
+  @override
+  State<_WorkbookDownload> createState() => _WorkbookDownloadState();
+}
+
+class _WorkbookDownloadState extends State<_WorkbookDownload> {
+  bool _busy = false;
+  double _progress = 0;
+
+  String get _name => 'Book-${widget.book.bookNo}-Student-Workbook';
+
+  Future<void> _download() async {
+    if (_busy) return;
+    final messenger = ScaffoldMessenger.of(context);
+    final url = '${AppConfig.siteBase}/Resources/SundaySchool_Lessons/${widget.lang.webFolder}/${widget.book.folder}/$_name.pdf';
+    setState(() { _busy = true; _progress = 0; });
+    try {
+      final r = await PdfDownloader.download(url, '${widget.lang.webFolder}-$_name.pdf', onProgress: (v) { if (mounted) setState(() => _progress = v); });
+      messenger.showSnackBar(SnackBar(content: Text(r.inDownloads ? 'Saved in Downloads / ${PdfDownloader.folderName}' : 'Downloaded')));
+      await OpenFilex.open(r.path, type: 'application/pdf');
+    } on PdfNotAvailable {
+      messenger.showSnackBar(const SnackBar(content: Text('This workbook is not available yet.')));
+    } catch (_) {
+      messenger.showSnackBar(const SnackBar(content: Text('Could not download. Check your internet connection.')));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = widget.color;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 2, 14, 14),
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: _busy ? null : _download,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: c.withValues(alpha: 0.05),
+              border: Border.all(color: c, width: 1.4),
+            ),
+            child: Row(children: [
+              Icon(Icons.picture_as_pdf_outlined, color: c),
+              const SizedBox(width: 10),
+              Expanded(child: Text(_name, style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700, color: c))),
+              _busy
+                  ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2.4, color: c, value: _progress > 0 ? _progress : null))
+                  : Icon(Icons.download_rounded, color: c),
+            ]),
+          ),
+        ),
+      ),
+    );
   }
 }

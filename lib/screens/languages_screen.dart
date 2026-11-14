@@ -44,7 +44,7 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
                 alignment: Alignment.centerLeft,
                 child: Wrap(spacing: 8, crossAxisAlignment: WrapCrossAlignment.center, children: [
                   Icon(Icons.menu_book, size: 18, color: Brand.accent),
-                  Text('Christian Sunday School', style: TextStyle(color: Brand.accent, fontWeight: FontWeight.w600)),
+                  Text('ABBA Sunday School', style: TextStyle(color: Brand.accent, fontWeight: FontWeight.w600)),
                 ]),
               ),
               Padding(
