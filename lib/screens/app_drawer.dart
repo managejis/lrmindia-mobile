@@ -34,7 +34,7 @@ class AppDrawer extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                child: Image.asset('assets/logo.png', height: 40, errorBuilder: (_, __, ___) => Icon(Icons.child_care, color: Brand.accent, size: 40)),
+                child: Image.asset('assets/app_logo.png', height: 40, errorBuilder: (_, __, ___) => Icon(Icons.child_care, color: Brand.accent, size: 40)),
               ),
               const SizedBox(height: 14),
               const Text('ABBA Sunday School', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800)),

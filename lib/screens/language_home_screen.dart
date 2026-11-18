@@ -259,12 +259,23 @@ class _BookCard extends StatelessWidget {
               ),
           ]),
         ),
-        Theme(
+        Container(
+          margin: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: a.withValues(alpha: 0.05),
+            border: Border.all(color: a, width: 1.4),
+          ),
+          child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
             key: PageStorageKey('book-${book.bookNo}-${forceOpen}'),
             initiallyExpanded: forceOpen,
-            title: Text(ui.browseLabel(lessons.length), style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600)),
+            tilePadding: const EdgeInsets.symmetric(horizontal: 14),
+            iconColor: a,
+            collapsedIconColor: a,
+            title: Text(ui.browseLabel(lessons.length), style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700, color: a)),
             children: [
               for (final l in shown)
                 ListTile(
@@ -275,6 +286,7 @@ class _BookCard extends StatelessWidget {
                   onTap: () => _open(context, l),
                 ),
             ],
+          ),
           ),
         ),
         _WorkbookDownload(book: book, lang: lang, color: a),

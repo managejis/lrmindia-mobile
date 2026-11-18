@@ -26,7 +26,7 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
       drawer: widget.forSongs ? null : const AppDrawer(),
       appBar: AppBar(
         title: widget.forSongs ? const Text('Songs') : Row(children: [
-          Image.asset('assets/logo.png', height: 30, errorBuilder: (_, __, ___) => Icon(Icons.child_care, color: Brand.accent)),
+          Image.asset('assets/app_logo.png', height: 30, errorBuilder: (_, __, ___) => Icon(Icons.child_care, color: Brand.accent)),
           const SizedBox(width: 10),
           const Text('ABBA Sunday School'),
         ]),
