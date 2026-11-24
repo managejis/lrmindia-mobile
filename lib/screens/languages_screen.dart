@@ -20,6 +20,15 @@ class LanguagesScreen extends StatefulWidget {
 class _LanguagesScreenState extends State<LanguagesScreen> {
   late Future<List<Language>> _langs = LocalDb.instance.languages();
 
+  /// Pinned languages first (in the order they were pinned), then the rest in the usual order.
+  List<Language> _ordered(List<Language> all) {
+    final pins = AppSettings.instance.pinsFor(widget.forSongs);
+    return [
+      for (final c in pins) ...all.where((l) => l.code == c),
+      ...all.where((l) => !pins.contains(l.code)),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,8 +44,15 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
         future: _langs,
         builder: (context, snap) {
           if (!snap.hasData) return const Center(child: CircularProgressIndicator());
-          final langs = snap.data!;
-          return ListView(
+          return ListenableBuilder(listenable: AppSettings.instance, builder: (context, _) => _list(snap.data!));
+        },
+      ),
+    );
+  }
+
+  Widget _list(List<Language> all) {
+    final langs = _ordered(all);
+    return ListView(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
             children: [
               Container(
@@ -63,12 +79,20 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
                         : 'Choose a language for the Bible lessons. Lessons are saved on your phone, so you can read them without internet.',
                     style: const TextStyle(fontSize: 15.5, height: 1.5)),
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                child: Row(children: [
+                  Icon(Icons.push_pin_outlined, size: 16, color: Colors.grey.shade600),
+                  const SizedBox(width: 6),
+                  Expanded(child: Text('Tap the pin on a language to keep it at the top.', style: TextStyle(fontSize: 13, color: Colors.grey.shade600))),
+                ]),
+              ),
               for (final l in langs)
-                Padding(padding: const EdgeInsets.only(bottom: 14), child: _LanguageCard(l, onTap: () => _open(l), comingSoon: !l.active)),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 14),
+                  child: _LanguageCard(l, onTap: () => _open(l), comingSoon: !l.active, pinned: AppSettings.instance.isPinned(widget.forSongs, l.code), onPin: () => AppSettings.instance.togglePin(widget.forSongs, l.code)),
+                ),
             ],
-          );
-        },
-      ),
     );
   }
 
@@ -85,8 +109,9 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
 class _LanguageCard extends StatelessWidget {
   final Language lang;
   final VoidCallback onTap;
-  final bool comingSoon;
-  const _LanguageCard(this.lang, {required this.onTap, this.comingSoon = false});
+  final bool comingSoon, pinned;
+  final VoidCallback? onPin;
+  const _LanguageCard(this.lang, {required this.onTap, this.comingSoon = false, this.pinned = false, this.onPin});
 
   @override
   Widget build(BuildContext context) => Card(
@@ -115,6 +140,13 @@ class _LanguageCard extends StatelessWidget {
                   Text(comingSoon ? 'Coming soon' : 'View all ${lang.name}', style: TextStyle(fontSize: 13.5, color: Colors.grey.shade600)),
                 ]),
               ),
+              if (onPin != null)
+                IconButton(
+                  tooltip: pinned ? 'Unpin' : 'Pin to top',
+                  visualDensity: VisualDensity.compact,
+                  onPressed: onPin,
+                  icon: Icon(pinned ? Icons.push_pin : Icons.push_pin_outlined, color: pinned ? Brand.accent : Colors.grey.shade500),
+                ),
               Icon(comingSoon ? Icons.schedule : Icons.arrow_circle_right_outlined, color: comingSoon ? Colors.grey.shade500 : Brand.accent, size: 30),
             ]),
           ),

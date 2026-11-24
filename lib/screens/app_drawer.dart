@@ -5,12 +5,13 @@ import '../theme.dart';
 import 'feedback_screen.dart';
 import 'languages_screen.dart';
 import 'lrm_india_screen.dart';
+import 'manageji_screen.dart';
 import 'privacy_screen.dart';
 import 'profile_screen.dart';
 import 'settings_screen.dart';
 import 'tips_screen.dart';
 
-/// The burger menu: Lessons, Songs, Tips, Profile, Settings, LRM India, Feedback, Privacy Policy.
+/// The burger menu: Lessons, Songs, Tips, Profile, Settings, LRM India, ManageJi, Feedback, Privacy Policy.
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
@@ -56,6 +57,7 @@ class AppDrawer extends StatelessWidget {
               _item(context, Icons.settings_outlined, 'Settings', () => _go(context, const SettingsScreen())),
               const Divider(),
               _item(context, Icons.church_outlined, 'LRM India', () => _go(context, const LrmIndiaScreen())),
+              _item(context, Icons.code_rounded, 'ManageJi', () => _go(context, const ManageJiScreen())),
               _item(context, Icons.feedback_outlined, 'Feedback', () => _go(context, const FeedbackScreen())),
               _item(context, Icons.privacy_tip_outlined, 'Privacy Policy', () => _go(context, const PrivacyScreen())),
             ]),

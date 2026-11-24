@@ -34,5 +34,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logo.png
+    - assets/manageji.png
     - assets/app_logo.png
     - assets/grn.jpg

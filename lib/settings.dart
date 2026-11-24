@@ -30,6 +30,9 @@ class AppSettings extends ChangeNotifier {
   int alertWeekday = DateTime.saturday, alertHour = 18, alertMinute = 0;
   String lastLang = 'hi';
 
+  /// Languages the user pinned to the top of the lessons list and of the songs list (language codes, in the order pinned).
+  List<String> pinnedLessons = [], pinnedSongs = [];
+
   Future<void> load() async {
     try {
       final p = await SharedPreferences.getInstance();
@@ -44,7 +47,21 @@ class AppSettings extends ChangeNotifier {
       alertHour = p.getInt('alert_hour') ?? 18;
       alertMinute = p.getInt('alert_minute') ?? 0;
       lastLang = p.getString('last_lang') ?? 'hi';
+      pinnedLessons = p.getStringList('pinned_lessons') ?? [];
+      pinnedSongs = p.getStringList('pinned_songs') ?? [];
     } catch (_) {/* defaults */}
+  }
+
+  List<String> pinsFor(bool songs) => songs ? pinnedSongs : pinnedLessons;
+
+  bool isPinned(bool songs, String code) => pinsFor(songs).contains(code);
+
+  /// Pins (or unpins) a language for the lessons list or the songs list.
+  Future<void> togglePin(bool songs, String code) async {
+    final l = pinsFor(songs);
+    l.contains(code) ? l.remove(code) : l.add(code);
+    notifyListeners();
+    try { (await SharedPreferences.getInstance()).setStringList(songs ? 'pinned_songs' : 'pinned_lessons', l); } catch (_) {}
   }
 
   Future<void> setColor(Color c) async {
