@@ -141,5 +141,14 @@ insert into public.languages (code, name, native_name, glyph, web_folder, sort_o
   ('mr','Marathi',  'मराठी',     'म',  'Marathi',  8,  true),
   ('hi','Hindi',    'हिन्दी',    'हि', 'Hindi',    9,  true),
   ('or','Odia',     'ଓଡ଼ିଆ',     'ଓ',  'Odia',     10, true),
-  ('ur','Urdu',     'اردو',      'ا',  'Urdu',     11, true)
+  ('ur','Urdu',     'اردو',      'ا',  'Urdu',     11, true),
+  ('zh','Mandarin Chinese', '中文', '中', 'Mandarin-Chinese', 12, true),
+  ('es','Spanish', 'Español', 'Es', 'Spanish', 13, true),
+  ('ar','Standard Arabic', 'العربية', 'ع', 'Standard-Arabic', 14, true),
+  ('fr','French', 'Français', 'Fr', 'French', 15, true),
+  ('pt','Portuguese', 'Português', 'Pt', 'Portuguese', 16, true),
+  ('id','Indonesian', 'Bahasa Indonesia', 'Id', 'Indonesian', 17, true),
+  ('ru','Russian', 'Русский', 'Р', 'Russian', 18, true),
+  ('de','German', 'Deutsch', 'De', 'German', 19, true),
+  ('ja','Japanese', '日本語', '日', 'Japanese', 20, true)
 on conflict (code) do update set sort_order = excluded.sort_order, native_name = excluded.native_name, glyph = excluded.glyph;

@@ -46,6 +46,16 @@ LANGS = [
     dict(folder='Hindi',     code='hi', native='हिन्दी',     glyph='हि', sort=9,  songs='Hindi'),
     dict(folder='Odia',      code='or', native='ଓଡ଼ିଆ',      glyph='ଓ',  sort=10, songs=None),
     dict(folder='Urdu',      code='ur', native='اردو',       glyph='ا',  sort=11, songs=None),
+    # International languages (Word files under D:\AI_Claude\International\SundaySchool_<src>) - shown after Malayalam
+    dict(folder='Mandarin-Chinese', src='Mandarin_Chinese', name='Mandarin Chinese', code='zh', native='中文',             glyph='中', sort=12, songs=None),
+    dict(folder='Spanish',          src='Spanish',          code='es', native='Español',          glyph='Es', sort=13, songs=None),
+    dict(folder='Standard-Arabic',  src='Standard_Arabic',  name='Standard Arabic',  code='ar', native='العربية',          glyph='ع',  sort=14, songs=None),
+    dict(folder='French',           src='French',           code='fr', native='Français',         glyph='Fr', sort=15, songs=None),
+    dict(folder='Portuguese',       src='Portuguese',       code='pt', native='Português',        glyph='Pt', sort=16, songs=None),
+    dict(folder='Indonesian',       src='Indonesian',       code='id', native='Bahasa Indonesia', glyph='Id', sort=17, songs=None),
+    dict(folder='Russian',          src='Russian',          code='ru', native='Русский',          glyph='Р',  sort=18, songs=None),
+    dict(folder='German',           src='German',           code='de', native='Deutsch',          glyph='De', sort=19, songs=None),
+    dict(folder='Japanese',         src='Japanese',         code='ja', native='日本語',            glyph='日', sort=20, songs=None),
 ]
 
 # The nine books (same for every language): English title, website folder (for the PDF link), cover colours, icon.
@@ -77,6 +87,15 @@ BOOK_TITLES_FALLBACK = {
     'kn': {1: 'ದೇವರೊಂದಿಗೆ ಆರಂಭ', 2: 'ದೇವರ ಪರಾಕ್ರಮಿ ಪುರುಷರು', 3: 'ದೇವರ ಮೂಲಕ ಜಯ', 4: 'ದೇವರ ಸೇವಕರು',
            5: 'ದೇವರಿಗಾಗಿ ವಿಚಾರಣೆಯಲ್ಲಿ', 6: 'ಯೇಸು, ಬೋಧಕ ಮತ್ತು ಗುಣಪಡಿಸುವವನು', 7: 'ಯೇಸು, ಪ್ರಭು ಮತ್ತು ರಕ್ಷಕ',
            8: 'ಪವಿತ್ರಾತ್ಮನ ಕಾರ್ಯಗಳು', 9: 'ಶುಭವಾರ್ತೆ'},
+    'zh': {1: '从神开始', 2: '神的大能之人', 3: '靠神得胜', 4: '神的仆人', 5: '为神受审', 6: '耶稣——教师与医治者', 7: '耶稣——主与救主', 8: '圣灵的作为', 9: '好消息'},
+    'es': {1: 'Comenzando con Dios', 2: 'Hombres poderosos de Dios', 3: 'Victoria por medio de Dios', 4: 'Siervos de Dios', 5: 'A juicio por Dios', 6: 'Jesús, Maestro y Sanador', 7: 'Jesús, Señor y Salvador', 8: 'Hechos del Espíritu Santo', 9: 'Buenas Noticias'},
+    'ar': {1: 'البداية مع الله', 2: 'رجال الله الأقوياء', 3: 'النصر بالله', 4: 'خدام الله', 5: 'المحاكمة من أجل الله', 6: 'يسوع المعلم والشافي', 7: 'يسوع الرب والمخلص', 8: 'أعمال الروح القدس', 9: 'البشارة'},
+    'fr': {1: 'Au commencement avec Dieu', 2: 'Des hommes de Dieu puissants', 3: 'La victoire par Dieu', 4: 'Serviteurs de Dieu', 5: 'Mis à l’épreuve pour Dieu', 6: 'Jésus, Maître et Guérisseur', 7: 'Jésus, Seigneur et Sauveur', 8: 'Les Actes du Saint-Esprit', 9: 'La Bonne Nouvelle'},
+    'pt': {1: 'Começando com Deus', 2: 'Homens Poderosos de Deus', 3: 'Vitória por meio de Deus', 4: 'Servos de Deus', 5: 'Em Julgamento por Deus', 6: 'Jesus Mestre e Curador', 7: 'Jesus Senhor e Salvador', 8: 'Atos do Espírito Santo', 9: 'Boas-Novas'},
+    'id': {1: 'Memulai bersama Allah', 2: 'Orang-orang Perkasa Allah', 3: 'Kemenangan melalui Allah', 4: 'Hamba-Hamba Allah', 5: 'Diuji demi Allah', 6: 'Yesus, Guru dan Penyembuh', 7: 'Yesus Tuhan dan Juruselamat', 8: 'Kisah Roh Kudus', 9: 'Kabar Baik'},
+    'ru': {1: 'Начало с Богом', 2: 'Могучие мужи Божьи', 3: 'Победа через Бога', 4: 'Слуги Божьи', 5: 'Перед судом за Бога', 6: 'Иисус — Учитель и Целитель', 7: 'Иисус — Господь и Спаситель', 8: 'Деяния Святого Духа', 9: 'Добрая весть'},
+    'de': {1: 'Der Anfang mit Gott', 2: 'Mächtige Männer Gottes', 3: 'Sieg durch Gott', 4: 'Diener Gottes', 5: 'Vor Gericht für Gott', 6: 'Jesus, Lehrer und Heiler', 7: 'Jesus, Herr und Retter', 8: 'Taten des Heiligen Geistes', 9: 'Gute Nachricht'},
+    'ja': {1: '神とともに始まる', 2: '神の勇士たち', 3: '神による勝利', 4: '神のしもべたち', 5: '神のための試練', 6: '教える方、癒やす方イエス', 7: '主であり救い主イエス', 8: '聖霊の働き', 9: '良い知らせ'},
 }
 
 KIND_BY_PREFIX = {1: 'teachers_guide', 2: 'workbook_student', 3: 'crafts', 4: 'games', 5: 'workbook_teacher'}
@@ -134,7 +153,7 @@ def docx_markdown(path, drop_head=False):
             if e.tag != W + 'p' or not plain(e): continue
             seen += 1
             t = plain(e)
-            if seen == 1 and re.match(r'^\D{1,14}\s*\d+\s*$', t): drop.add(idx)
+            if seen == 1 and re.match(r'^\D{1,14}\s*\d+\s*\D{0,2}$', t): drop.add(idx)
             elif seen == 2 and drop: drop.add(idx)
             elif seen == 3 and drop and '·' in t: drop.add(idx)
             if seen >= 3: break
@@ -199,12 +218,12 @@ def lesson_title(files, fallback):
     """The lesson title in the language of the document."""
     if 'teachers_guide' in files:
         ps = docx_paras(files['teachers_guide'])
-        if len(ps) > 1 and re.match(r'^\D{1,14}\s*\d+\s*$', ps[0]): return ps[1].strip()
+        if len(ps) > 1 and re.match(r'^\D{1,14}\s*\d+\s*\D{0,2}$', ps[0]): return ps[1].strip()
     for key in ('workbook_student', 'workbook_teacher'):
         if key in files:
             ps = docx_paras(files[key])
             if ps:
-                m = re.match(r'^.{1,15}?-?\s*\d+\s*[:：]\s*(.+)$', ps[0])
+                m = re.match(r'^[^\d]{1,15}?[-–]?\s*\d+\s*[^\d:：]{0,4}[:：]\s*(.+)$', ps[0])
                 if m: return m.group(1).strip()
     return fallback
 
@@ -213,7 +232,7 @@ def native_book_title(files):
     if 'teachers_guide' not in files: return None
     ps = docx_paras(files['teachers_guide'])
     if len(ps) > 2 and '·' in ps[2]:
-        m = re.search(r'\d+\s*[:：]\s*(.+)$', ps[2])
+        m = re.search(r'\d+\s*[^\d:：]{0,3}\s*[:：]\s*(.+)$', ps[2])
         if m: return m.group(1).strip()
     return None
 
@@ -264,13 +283,14 @@ def write_youtube_template(datas):
 # ------------------------------------------------------------------ build one language
 def language_row(L, active):
     lead = ('Nine books of Bible lessons in %s%s, with a Teacher’s Guide, workbooks, crafts and games for every lesson.'
-            % (L['folder'], '' if L['code'] == 'en' else ' (%s)' % L['native']))
-    return dict(code=L['code'], name=L['folder'], native_name=L['native'], glyph=L['glyph'], web_folder=L['folder'],
+            % (L.get('name', L['folder']), '' if L['code'] == 'en' else ' (%s)' % L['native']))
+    return dict(code=L['code'], name=L.get('name', L['folder']), native_name=L['native'], glyph=L['glyph'], web_folder=L['folder'],
                 hero_lead=lead if active else None, sort_order=L['sort'], active=active)
 
 def build(L, english_titles):
     code = L['code']
-    ldir = os.path.join(DOCS, 'SundaySchool_' + L['folder'])
+    ldir = os.path.join(DOCS, 'SundaySchool_' + L.get('src', L['folder']))
+    if not os.path.isdir(ldir): ldir = os.path.join(DOCS, 'International', 'SundaySchool_' + L.get('src', L['folder']))
     books = books_of(ldir)
     out = dict(language=language_row(L, bool(books)), books=[], lessons=[], contents=[], songs=[])
     warn = []
@@ -334,7 +354,7 @@ if __name__ == '__main__':
     titles = english_titles()
     built = []
     for L in LANGS:
-        if ONLY and L['folder'].lower() not in ONLY: continue
+        if ONLY and L['folder'].lower() not in ONLY and L['code'] not in ONLY: continue
         data = build(L, titles); built.append(data)
         with open(os.path.join(OUT, L['folder'].lower() + '.json'), 'w', encoding='utf-8') as f: json.dump(data, f, ensure_ascii=False, indent=1)
         if UPLOAD: upload(data)
