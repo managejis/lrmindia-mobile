@@ -1,4 +1,4 @@
-.dart_tool/
+﻿.dart_tool/
 build/
 .idea/
 *.iml
@@ -7,4 +7,4 @@ build/
 .packages
 pubspec.lock
 android/local.properties
-data/
+/data/
